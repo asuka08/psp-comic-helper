@@ -157,6 +157,11 @@ namespace PspComicHelper
 				ProgressComicFile( files[i], Path.Combine( tempOutput, i.ToString( "d6" ) + ".jpg" ) );
 				//File.Copy( files[i], Path.Combine( output, Path.GetFileName( files[i] ) ) );
 				RateOfProgress = 20 + 60 * i / files.Count;
+				//新加入代码： 每处理20张图片就把最大内存占用量设为200MB, avoid crash on some machine - purplezhang@gmail.com
+                if( i % 20 == 0 ){
+                    GC.Collect();
+                    System.Diagnostics.Process.GetCurrentProcess().MaxWorkingSet = (IntPtr)209715200;
+                }
 			}
 
 			ProgressComicToOutput( tempOutput );
